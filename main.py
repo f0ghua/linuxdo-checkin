@@ -5,11 +5,10 @@ import random
 from tabulate import tabulate
 from playwright.sync_api import sync_playwright
 
-# https://linux.do/new
-# https://linux.do/search?q=after%3A2024-07-19
 
 USERNAME = os.environ.get("USERNAME")
 PASSWORD = os.environ.get("PASSWORD")
+
 
 HOME_URL = "https://linux.do/"
 
@@ -17,11 +16,8 @@ HOME_URL = "https://linux.do/"
 class LinuxDoBrowser:
     def __init__(self) -> None:
         self.pw = sync_playwright().start()
-        proxy_settings = {
-            "server": "http://127.0.0.1:2802"
-        }
         self.browser = self.pw.firefox.launch(headless=True)
-        self.context = self.browser.new_context(proxy=proxy_settings)
+        self.context = self.browser.new_context()
         self.page = self.context.new_page()
         self.page.goto(HOME_URL)
 
@@ -47,9 +43,9 @@ class LinuxDoBrowser:
             page = self.context.new_page()
             page.goto(HOME_URL + topic.get_attribute("href"))
             time.sleep(3)
-            if random.random() < 0.02:  # 100 * 0.02 * 30 = 60
-                self.click_like(page)
-            time.sleep(3)
+            #if random.random() < 0.02:  # 100 * 0.02 * 30 = 60
+            #    self.click_like(page)
+            #time.sleep(3)
             page.close()
 
     def run(self):
